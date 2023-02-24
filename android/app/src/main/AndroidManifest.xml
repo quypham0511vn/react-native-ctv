@@ -1,0 +1,73 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.tienngay">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-feature android:name="android.hardware.camera.front" android:required="true" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <queries>
+        <package android:name="com.facebook.katana" />
+    </queries>
+    <queries>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+    </queries>
+
+    <application android:name=".MainApplication" 
+        android:label="@string/app_name" 
+        android:icon="@mipmap/ic_launcher"  
+        android:allowBackup="false" 
+        android:largeHeap="true" 
+        android:roundIcon="@mipmap/ic_launcher_round" 
+        android:configChanges="orientation"
+        android:screenOrientation="portrait"
+        android:theme="@style/SplashTheme"
+    >
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDU6vwuTA_eC2NKb0IuDJpa2XmrypkTSvA"/>
+
+        <!-- You will also only need to add this uses-library tag -->
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <activity android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                    android:host="@string/host"
+                    android:pathPrefix="/paymentgateway"/>
+            </intent-filter>
+            <intent-filter>
+
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                    android:host="@string/host1"
+                    android:pathPrefix="/MoMoAppKH"/>
+            </intent-filter>
+        </activity>
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
+        <meta-data android:name="com.bugsnag.android.API_KEY" android:value="5b78c6f92c5652572cc61dbf0fce3afd" />
+        <meta-data
+            android:name="com.bugsnag.android.ENDPOINT_NOTIFY"
+            android:value="https://notify.bugsnag.com" />
+        <meta-data
+            android:name="com.bugsnag.android.ENDPOINT_SESSIONS"
+            android:value="https://sessions.bugsnag.com" />
+    </application>
+</manifest>

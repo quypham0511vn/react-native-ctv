@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">CộngTácViên TiệnNgay</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">VVggFGwjTswr_-taVOIKe11xaZmXXkRE0ZLbt</string>
+    <string name="facebook_app_id">489039303246262</string>
+    <string name="facebook_client_token">25377ddbf125c0d6707b0780aef5a612</string>
+    <string name="host">tienngay.vn</string>
+    <string name="host1">sandboxappkh.tienngay.vn</string>
+</resources>

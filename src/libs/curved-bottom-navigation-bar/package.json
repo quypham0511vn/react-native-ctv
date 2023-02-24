@@ -1,0 +1,97 @@
+{
+  "name": "curved-bottom-navigation-bar",
+  "version": "2.0.4",
+  "description": "Hight performance animated bottom navigation bar for both Android and IOS",
+  "main": "lib/commonjs/index",
+  "module": "lib/module/index",
+  "types": "lib/typescript/index.d.ts",
+  "react-native": "src/index.ts",
+  "source": "src/index.ts",
+  "files": [
+    "src",
+    "lib",
+    "android",
+    "!lib/typescript/example",
+    "!android/build"
+  ],
+  "scripts": {
+    "test": "jest",
+    "typescript": "tsc --noEmit",
+    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "prepare": "bob build",
+    "release": "release-it",
+    "example": "yarn --cwd example",
+    "pods": "cd example && pod-install --quiet",
+    "bootstrap": "yarn example && yarn && yarn pods"
+  },
+  "keywords": [
+    "react-native",
+    "ios",
+    "android",
+    "react-navigation",
+    "reanimated",
+    "tab-bar",
+    "bottombar",
+    "bottom-bar",
+    "reanimated-bottom-bar"
+  ],
+  "repository": "https://github.com/MasonLe2497/curved-bottom-navigation-bar#readme",
+  "author": "MasonLe <lhngoc2497@gmail.com> (https://github.com/MasonLe2497)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MasonLe2497/curved-bottom-navigation-bar/issues"
+  },
+  "homepage": "https://github.com/MasonLe2497/curved-bottom-navigation-bar#readme",
+  "dependencies": {
+    "react-fast-compare": "3.1.1"
+  },
+  "devDependencies": {
+    "@commitlint/config-conventional": "^11.0.0",
+    "@react-native-community/eslint-config": "^2.0.0",
+    "@react-navigation/bottom-tabs": ">= 5.11.7",
+    "@react-navigation/native": ">= 5.9.2",
+    "@release-it/conventional-changelog": "^2.0.0",
+    "@types/jest": "^26.0.0",
+    "@types/react": "^16.9.19",
+    "@types/react-native": "0.62.13",
+    "commitlint": "^11.0.0",
+    "eslint": "^7.2.0",
+    "eslint-config-prettier": "^7.0.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "husky": "^4.2.5",
+    "jest": "^26.0.1",
+    "pod-install": "^0.1.0",
+    "prettier": "^2.0.5",
+    "react": "17.0.2",
+    "react-native": "0.66.4",
+    "react-native-builder-bob": "^0.17.1",
+    "react-native-reanimated": "^2.3.1",
+    "react-native-safe-area-context": "^3.2.9",
+    "react-native-svg": "^12.1.1",
+    "release-it": "^14.2.2",
+    "typescript": "^4.3.2"
+  },
+  "peerDependencies": {
+    "@react-navigation/bottom-tabs": ">= 5.11.7",
+    "@react-navigation/native": ">= 5.9.2",
+    "react": "*",
+    "react-native": "*",
+    "react-native-reanimated": ">= 2.3.0",
+    "react-native-safe-area-context": ">=3.1.9",
+    "react-native-svg": ">= 12.1.0"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      [
+        "typescript",
+        {
+          "project": "tsconfig.build.json"
+        }
+      ]
+    ]
+  }
+}

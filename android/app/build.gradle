@@ -1,0 +1,150 @@
+apply plugin: "com.android.application"
+apply plugin: 'com.google.gms.google-services'
+
+import com.android.build.OutputFile
+
+project.ext.react = [
+        enableHermes: false,  // clean and rebuild if changing
+        hermesCommand: "../../node_modules/hermes-engine/osx-bin/hermesc",
+        deleteDebugFilesForVariant: { false }
+]
+
+apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
+apply plugin: "com.bugsnag.android.gradle"
+
+def enableSeparateBuildPerCPUArchitecture = true
+
+def enableProguardInReleaseBuilds = false
+def jscFlavor = 'org.webkit:android-jsc:+'
+def enableHermes = project.ext.react.get("enableHermes", false);
+
+def nativeArchitectures = project.getProperties().get("reactNativeDebugArchitectures")
+
+android {
+    namespace 'com.tienngay'
+    ndkVersion rootProject.ext.ndkVersion
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    lintOptions {
+        checkReleaseBuilds false
+    }
+
+    defaultConfig {
+        applicationId "vn.tienngay.ctv"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 5
+        versionName "1.0"
+        resValue 'string', "CODE_PUSH_APK_BUILD_TIME", String.format("\"%d\"", System.currentTimeMillis())
+    }
+    splits {
+        abi {
+            reset()
+            enable enableSeparateBuildPerCPUArchitecture
+            universalApk false  // If true, also generate a universal APK
+            include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+
+        }
+    }
+    signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+        release {
+            storeFile file('key_store_prod.jks')
+            storePassword 'key_store'
+            keyAlias 'key_store'
+            keyPassword '123456'
+        }
+    }
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+            if (nativeArchitectures) {
+                ndk {
+                    abiFilters nativeArchitectures.split(',')
+                }
+            }
+        }
+        release {
+            // Caution! In production, you need to generate your own keystore file.
+            // see https://reactnative.dev/docs/signed-apk-android.
+            signingConfig signingConfigs.debug
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+
+    // applicationVariants are e.g. debug, release
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            // For each separate APK per architecture, set a unique version code as described here:
+            // https://developer.android.com/studio/build/configure-apk-splits.html
+            // Example: versionCode 1 will generate 1001 for armeabi-v7a, 1002 for x86, etc.
+            def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
+            def abi = output.getFilter(OutputFile.ABI)
+            if (abi != null) {  // null for the universal-debug, universal-release variants
+                output.versionCodeOverride =
+                        defaultConfig.versionCode * 1000 + versionCodes.get(abi)
+            }
+
+        }
+    }
+
+    packagingOptions {
+        pickFirst '**/x86/libc++_shared.so'
+        pickFirst '**/x86/libjsc.so'
+        pickFirst '**/x86_64/libjsc.so'
+        pickFirst '**/arm64-v8a/libjsc.so'
+        pickFirst '**/arm64-v8a/libc++_shared.so'
+        pickFirst '**/x86_64/libc++_shared.so'
+        pickFirst '**/armeabi-v7a/libc++_shared.so'
+        pickFirst '**/armeabi-v7a/libjsc.so'
+        pickFirst '**/arm64/libreanimated.so'
+        pickFirst '**/libc++_shared.so'
+        pickFirst '**/libfbjni.so'
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4G"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    //noinspection GradleDynamicVersion
+    implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    implementation 'com.facebook.android:facebook-android-sdk:latest.release'
+    implementation project(':react-native-android-open-settings')
+    implementation project(':react-native-push-notification')
+    
+    if (enableHermes) {
+        //noinspection GradleDynamicVersion
+        implementation("com.facebook.react:hermes-engine:+") { // From node_modules
+             exclude group:'com.facebook.fbjni'
+        }
+    } else {
+        implementation jscFlavor
+    }
+}
+
+// Run this once to be able to run the application with BUCK
+// puts all compile dependencies into folder libs for BUCK to use
+task copyDownloadableDepsToLibs(type: Copy) {
+    from configurations.implementation
+    into 'libs'
+}
+
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+
+bugsnag {
+  uploadReactNativeMappings = false
+
+  endpoint = "https://upload.bugsnag.com"
+}
